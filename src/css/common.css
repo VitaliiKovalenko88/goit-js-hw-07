@@ -16,6 +16,7 @@ body {
 body.hidden-scroll {
   background-color: chartreuse;
 }
+
 input {
   padding: 8px;
   font: inherit;
