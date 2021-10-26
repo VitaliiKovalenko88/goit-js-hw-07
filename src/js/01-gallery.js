@@ -1,16 +1,10 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
-// import * as basicLightbox from "basiclightbox";
+import { refs } from "./refs.js";
+console.log(refs);
 
-const refs = {
-  gelleryEl: document.querySelector(".gallery"),
-};
-
-const createItemsGallaryMarkup = (img) =>
-  img
-    .map(
-      ({ original, preview, description }) =>
-        `<div class="gallery__item">
+const markupItemsGallery = ({ original, preview, description }) => {
+  return `<div class="gallery__item">
            <a class="gallery__link" href="${original}">
              <img
                class="gallery__image"
@@ -19,30 +13,33 @@ const createItemsGallaryMarkup = (img) =>
                alt="${description}"
              />
            </a>
-         </div>`
-    )
-    .join("");
+         </div>`;
+};
+
+const createItemsGallaryMarkup = (img) => img.map(markupItemsGallery).join("");
 
 refs.gelleryEl.insertAdjacentHTML(
   "beforeend",
   createItemsGallaryMarkup(galleryItems)
 );
 
-refs.gelleryEl.addEventListener("click", (e) => {
+const onOpenModalImage = (url) => {
+  const instance = basicLightbox.create(`
+    <img src="${url}" width="800" height="600">
+`);
+  instance.show();
+};
+const onGalleryElClick = (e) => {
   e.preventDefault();
   const currentImg = e.target;
   const isGalleryImg = currentImg.classList.contains("gallery__image");
   if (!isGalleryImg) {
     return;
   }
-  const currentUrl = currentImg.dataset.source;
-  onOpenModalImage(currentUrl);
-});
 
-const onOpenModalImage = (url) => {
-  const instance = basicLightbox.create(`
-    <img src="${url}" width="800" height="600">
-`);
-  instance.show();
-  console.dir(instance.element);
+  onOpenModalImage(currentImg.dataset.source);
 };
+
+refs.gelleryEl.addEventListener("click", onGalleryElClick);
+
+export { createItemsGallaryMarkup };
